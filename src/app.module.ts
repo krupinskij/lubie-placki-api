@@ -9,9 +9,12 @@ import config from './config';
   imports: [
     RecipeModule,
     GraphQLModule.forRoot({
+      cors: {
+        origin: true
+      },
       autoSchemaFile: 'schema.gql',
     }),
-    MongooseModule.forRoot((() => { console.log(config.DATABASE_URI); return config.DATABASE_URI; })()),
+    MongooseModule.forRoot(config.DATABASE_URI),
   ],
   providers: [],
 })

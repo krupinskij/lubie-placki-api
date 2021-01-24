@@ -8,8 +8,8 @@ import { RecipeInput } from './inputs/recipe.input';
 export class RecipeService {
   constructor(@InjectModel('Recipe') private readonly recipeModel: Model<Recipe>) {}
 
-  async findOne(id: string): Promise<Recipe> {
-    return await this.recipeModel.findOne({id})
+  async findOne(_id: string): Promise<Recipe> {
+    return await this.recipeModel.findOne({ _id })
   }
 
   async findAll(): Promise<Recipe[]> {
