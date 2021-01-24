@@ -1,0 +1,57 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Direction {
+  text: String!
+}
+
+type Hint {
+  text: String!
+}
+
+type Ingredient {
+  product: String!
+  quantity: Float!
+  unit: String!
+}
+
+type Recipe {
+  id: ID!
+  name: String!
+  description: String!
+  ingredients: [Ingredient!]!
+  directions: [Direction!]!
+  hints: [Hint!]!
+}
+
+type Query {
+  recipe(id: String!): Recipe!
+  recipes: [Recipe!]!
+}
+
+type Mutation {
+  createRecipe(input: RecipeInput!): Recipe!
+}
+
+input RecipeInput {
+  name: String!
+  description: String!
+  ingredients: [IngredientInput!]!
+  directions: [DirectionInput!]!
+  hints: [HintInput!]!
+}
+
+input IngredientInput {
+  product: String!
+  quantity: Float!
+  unit: String!
+}
+
+input DirectionInput {
+  text: String!
+}
+
+input HintInput {
+  text: String!
+}
