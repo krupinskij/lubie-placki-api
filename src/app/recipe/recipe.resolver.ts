@@ -17,6 +17,11 @@ export class RecipeResolver {
     return await this.recipeService.findAll();
   }
 
+  @Query(() => [Recipe])
+  async randomRecipe() {
+    return await this.recipeService.findRandom();
+  }
+
   @Mutation(() => Recipe)
   async createRecipe(@Args('input') input: RecipeInput) {
     return await this.recipeService.create(input);

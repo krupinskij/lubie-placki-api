@@ -6,7 +6,7 @@ import { Ingredient } from "./ingredient.dto";
 @ObjectType()
 export class Recipe {
   @Field(() => ID)
-  id: string;
+  _id: string;
   @Field()
   readonly name: string;
   @Field()
