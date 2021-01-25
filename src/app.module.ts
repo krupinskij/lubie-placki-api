@@ -9,10 +9,17 @@ import config from './config';
   imports: [
     RecipeModule,
     GraphQLModule.forRoot({
-      cors: {
-        origin: true
-      },
       autoSchemaFile: 'schema.gql',
+      debug: process.env.NODE_ENV !== 'production',
+      playground: process.env.NODE_ENV !== 'production',
+      installSubscriptionHandlers: true,
+      context: ({req}) => {
+          return {req};
+      },
+      cors: {
+          credentials: true,
+          origin: true,
+      }
     }),
     MongooseModule.forRoot(config.DATABASE_URI),
   ],
