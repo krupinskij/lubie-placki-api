@@ -17,7 +17,7 @@ type Ingredient {
 }
 
 type Recipe {
-  id: ID!
+  _id: ID!
   name: String!
   description: String!
   ingredients: [Ingredient!]!
@@ -28,6 +28,7 @@ type Recipe {
 type Query {
   recipe(id: String!): Recipe!
   recipes: [Recipe!]!
+  randomRecipe: [Recipe!]!
 }
 
 type Mutation {

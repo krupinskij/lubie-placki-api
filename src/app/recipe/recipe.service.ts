@@ -16,6 +16,10 @@ export class RecipeService {
     return await this.recipeModel.find().exec();
   }
 
+  async findRandom(): Promise<Recipe[]> {
+    return await this.recipeModel.aggregate<Recipe>([{ $sample: { size: 1 } }]);
+  }
+
   async create(recipeInput: RecipeInput): Promise<Recipe> {
     const createdRecipe = new this.recipeModel(recipeInput);
     return await createdRecipe.save();
