@@ -25,6 +25,17 @@ type Recipe {
   hints: [Hint!]!
 }
 
+type User {
+  id: Float
+  email: String
+  username: String
+}
+
+type UserToken {
+  token: String!
+  user: User!
+}
+
 type Query {
   recipe(id: String!): Recipe!
   recipes: [Recipe!]!
@@ -33,6 +44,8 @@ type Query {
 
 type Mutation {
   createRecipe(input: RecipeInput!): Recipe!
+  login(input: AuthLoginInput!): UserToken!
+  register(input: AuthRegisterInput!): UserToken!
 }
 
 input RecipeInput {
@@ -55,4 +68,15 @@ input DirectionInput {
 
 input HintInput {
   text: String!
+}
+
+input AuthLoginInput {
+  email: String!
+  password: String!
+}
+
+input AuthRegisterInput {
+  email: String!
+  username: String
+  password: String!
 }

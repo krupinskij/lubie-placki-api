@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { RecipeModule } from './app/recipe/recipe.module';
+import { AuthModule } from './app/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import config from './config';
@@ -8,6 +9,7 @@ import config from './config';
 @Module({
   imports: [
     RecipeModule,
+    AuthModule,
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       debug: process.env.NODE_ENV !== 'production',
