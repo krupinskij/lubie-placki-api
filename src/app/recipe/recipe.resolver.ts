@@ -2,6 +2,10 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { RecipeService } from './recipe.service';
 import { Recipe } from './dto/recipe.dto';
 import { RecipeInput } from './inputs/recipe.input';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from '../auth/strategies/gql-auth.guard';
+import { CurrentUser } from '../auth/strategies/current-user';
+import { User } from '../user/user.interface';
 
 @Resolver()
 export class RecipeResolver {
@@ -23,7 +27,8 @@ export class RecipeResolver {
   }
 
   @Mutation(() => Recipe)
-  async createRecipe(@Args('input') input: RecipeInput) {
+  @UseGuards(GqlAuthGuard)
+  async createRecipe(@Args('input') input: RecipeInput, @CurrentUser() user: User) {
     return await this.recipeService.create(input);
   }
 }
