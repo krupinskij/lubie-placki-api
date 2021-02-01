@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  _id: String
+  email: String
+  username: String
+}
+
 type Direction {
   text: String!
 }
@@ -23,12 +29,8 @@ type Recipe {
   ingredients: [Ingredient!]!
   directions: [Direction!]!
   hints: [Hint!]!
-}
-
-type User {
-  id: Float
-  email: String
-  username: String
+  owner: User!
+  createdAt: Float!
 }
 
 type UserToken {
