@@ -6,10 +6,14 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/strategies/gql-auth.guard';
 import { CurrentUser } from '../auth/strategies/current-user';
 import { User } from '../user/user.interface';
+import { UserService } from '../user/user.service';
 
 @Resolver()
 export class RecipeResolver {
-  constructor(private readonly recipeService: RecipeService) {}
+  constructor(
+    private readonly recipeService: RecipeService,
+    private readonly userService: UserService
+  ) {}
 
   @Query(() => Recipe)
   async recipe(@Args('id') id: string) {
@@ -29,6 +33,7 @@ export class RecipeResolver {
   @Mutation(() => Recipe)
   @UseGuards(GqlAuthGuard)
   async createRecipe(@Args('input') input: RecipeInput, @CurrentUser() user: User) {
-    return await this.recipeService.create(input);
+    const owner = await this.userService.findById(user._id);
+    return await this.recipeService.create(input, owner);
   }
 }

@@ -8,5 +8,10 @@ export const RecipeSchema = new mongoose.Schema({
   description: String,
   ingredients: [IngredientSchema],
   directions: [DirectionSchema],
-  hints: [HintSchema]
+  hints: [HintSchema],
+  createdAt: Number,
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 });
