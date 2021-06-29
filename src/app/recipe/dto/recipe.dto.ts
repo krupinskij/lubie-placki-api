@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int, ID } from  "@nestjs/graphql";
+import { User } from "src/app/user/dto/user.dto";
 import { Direction } from "./direction.dto";
 import { Hint } from "./hint.dto";
 import { Ingredient } from "./ingredient.dto";
@@ -17,4 +18,8 @@ export class Recipe {
   readonly directions: Direction[];
   @Field(() => [Hint])
   readonly hints: Hint[];
+  @Field(() => User)
+  readonly owner: User;
+  @Field()
+  readonly createdAt: number;
 }
