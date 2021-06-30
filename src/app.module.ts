@@ -21,7 +21,8 @@ import config from './config';
       cors: {
           credentials: true,
           origin: true,
-      }
+      },
+      fieldResolverEnhancers: ['guards', 'interceptors']
     }),
     MongooseModule.forRoot(config.DATABASE_URI),
   ],
