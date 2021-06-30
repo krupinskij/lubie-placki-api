@@ -38,7 +38,7 @@ export class RecipeResolver {
     return await this.recipeService.findRandom();
   }
 
-  @Query(() => Recipe)
+  @Query(() => [Recipe])
   @UseGuards(OptAuthGuard)
   @UseInterceptors(FavouriteInterceptor)
   async typeRecipes(@Args('type') type: string) {

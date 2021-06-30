@@ -9,6 +9,8 @@ export class RecipeInput {
   readonly name: string;
   @Field()
   readonly description: string;
+  @Field()
+  readonly type: string;
   @Field(type => [IngredientInput])
   readonly ingredients: IngredientInput;
   @Field(type => [DirectionInput])
