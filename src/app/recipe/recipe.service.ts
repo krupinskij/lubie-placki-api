@@ -20,6 +20,10 @@ export class RecipeService {
     return await this.recipeModel.find().populate('owner').exec();
   }
 
+  async findAllFavourite(user: User): Promise<Recipe[]> {
+    return await this.recipeModel.find({ fans: { $in: [user]}}).populate('owner').exec();
+  }
+
   async findRandom(): Promise<Recipe[]> {
     return await this.recipeModel.aggregate<Recipe>([{ $sample: { size: 1 } }]);
   }
@@ -28,6 +32,19 @@ export class RecipeService {
     const createdRecipe = new this.recipeModel(recipeInput);
     createdRecipe.owner = owner;
     createdRecipe.createdAt = dayjs().unix();
+    createdRecipe.fans = [];
     return await createdRecipe.save();
+  }
+
+  async addToFavourite(recipeId: string, user: User): Promise<Recipe> {
+    const recipe = await this.recipeModel.findOne({ _id: recipeId }).populate('owner');
+    recipe.fans = [...recipe.fans, user];
+    return await recipe.save();
+  }
+
+  async removeFromFavourite(recipeId: string, user: User): Promise<Recipe> {
+    const recipe = await this.recipeModel.findOne({ _id: recipeId }).populate('owner');
+    recipe.fans = recipe.fans.filter(fan => fan.id === user.id);
+    return await recipe.save();
   }
 }

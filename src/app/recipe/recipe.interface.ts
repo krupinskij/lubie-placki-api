@@ -11,4 +11,5 @@ export interface Recipe extends Document {
   readonly hints: Hint[];
   createdAt: number;
   owner: User;
+  fans: User[];
 }
