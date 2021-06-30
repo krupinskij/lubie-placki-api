@@ -38,6 +38,14 @@ export class RecipeResolver {
     return await this.recipeService.findRandom();
   }
 
+  @Query(() => [Recipe])
+  @UseGuards(GqlAuthGuard)
+  @UseInterceptors(FavouriteInterceptor)
+  async favouriteRecipes(@CurrentUser() user: User) {
+    const currentUser = await this.userService.findById(user._id);
+    return await this.recipeService.findAllFavourite(currentUser);
+  }
+
   @Mutation(() => Recipe)
   @UseGuards(GqlAuthGuard)
   async createRecipe(@Args('input') input: RecipeInput, @CurrentUser() user: User) {

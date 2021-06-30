@@ -20,6 +20,10 @@ export class RecipeService {
     return await this.recipeModel.find().populate('owner').exec();
   }
 
+  async findAllFavourite(user: User): Promise<Recipe[]> {
+    return await this.recipeModel.find({ fans: { $in: [user]}}).populate('owner').exec();
+  }
+
   async findRandom(): Promise<Recipe[]> {
     return await this.recipeModel.aggregate<Recipe>([{ $sample: { size: 1 } }]);
   }
