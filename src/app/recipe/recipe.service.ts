@@ -28,6 +28,7 @@ export class RecipeService {
     const createdRecipe = new this.recipeModel(recipeInput);
     createdRecipe.owner = owner;
     createdRecipe.createdAt = dayjs().unix();
+    createdRecipe.fans = [];
     return await createdRecipe.save();
   }
 
@@ -39,7 +40,7 @@ export class RecipeService {
 
   async removeFromFavourite(recipeId: string, user: User): Promise<Recipe> {
     const recipe = await this.recipeModel.findOne({ _id: recipeId }).populate('owner');
-    recipe.fans = recipe.fans.filter(fan => fan.id !== user.id);
+    recipe.fans = recipe.fans.filter(fan => fan.id === user.id);
     return await recipe.save();
   }
 }
