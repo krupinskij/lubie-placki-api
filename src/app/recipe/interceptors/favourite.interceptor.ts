@@ -13,6 +13,8 @@ export class FavouriteInterceptor<T> implements NestInterceptor<T, Response<T>> 
     return next.handle().pipe(map(data => {
       const ctx = GqlExecutionContext.create(context);
       const currentUser = ctx.getContext().req.user;
+      data.isFavourite = !!data.fans.find(fan => fan._id === currentUser._id);
+      data.fans = null;
       return data;
     }));
   }

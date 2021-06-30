@@ -22,4 +22,6 @@ export class Recipe {
   readonly owner: User;
   @Field()
   readonly createdAt: number;
+  @Field()
+  readonly isFavourite: boolean;
 }

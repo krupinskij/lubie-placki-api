@@ -30,4 +30,16 @@ export class RecipeService {
     createdRecipe.createdAt = dayjs().unix();
     return await createdRecipe.save();
   }
+
+  async addToFavourite(recipeId: string, user: User): Promise<Recipe> {
+    const recipe = await this.recipeModel.findOne({ _id: recipeId }).populate('owner');
+    recipe.fans = [...recipe.fans, user];
+    return await recipe.save();
+  }
+
+  async removeFromFavourite(recipeId: string, user: User): Promise<Recipe> {
+    const recipe = await this.recipeModel.findOne({ _id: recipeId }).populate('owner');
+    recipe.fans = recipe.fans.filter(fan => fan.id !== user.id);
+    return await recipe.save();
+  }
 }

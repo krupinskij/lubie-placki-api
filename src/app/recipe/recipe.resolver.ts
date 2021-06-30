@@ -44,4 +44,18 @@ export class RecipeResolver {
     const owner = await this.userService.findById(user._id);
     return await this.recipeService.create(input, owner);
   }
+
+  @Mutation(() => Recipe)
+  @UseGuards(GqlAuthGuard)
+  async addToFavourite(@Args('id') recipeId: string, @CurrentUser() user: User) {
+    const currentUser = await this.userService.findById(user._id);
+    return await this.recipeService.addToFavourite(recipeId, currentUser);
+  }
+
+  @Mutation(() => Recipe)
+  @UseGuards(GqlAuthGuard)
+  async removeFromFavourite(@Args('id') recipeId: string, @CurrentUser() user: User) {
+    const currentUser = await this.userService.findById(user._id);
+    return await this.recipeService.removeFromFavourite(recipeId, currentUser);
+  }
 }
