@@ -38,6 +38,13 @@ export class RecipeResolver {
     return await this.recipeService.findRandom();
   }
 
+  @Query(() => Recipe)
+  @UseGuards(OptAuthGuard)
+  @UseInterceptors(FavouriteInterceptor)
+  async typeRecipes(@Args('type') type: string) {
+    return await this.recipeService.findAllByType(type);
+  }
+
   @Query(() => [Recipe])
   @UseGuards(GqlAuthGuard)
   @UseInterceptors(FavouriteInterceptor)
