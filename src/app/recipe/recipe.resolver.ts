@@ -39,6 +39,13 @@ export class RecipeResolver {
   }
 
   @Query(() => [Recipe])
+  @UseGuards(OptAuthGuard)
+  @UseInterceptors(FavouriteInterceptor)
+  async typeRecipes(@Args('type') type: string) {
+    return await this.recipeService.findAllByType(type);
+  }
+
+  @Query(() => [Recipe])
   @UseGuards(GqlAuthGuard)
   @UseInterceptors(FavouriteInterceptor)
   async favouriteRecipes(@CurrentUser() user: User) {

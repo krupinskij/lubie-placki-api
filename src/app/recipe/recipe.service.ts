@@ -28,6 +28,10 @@ export class RecipeService {
     return await this.recipeModel.aggregate<Recipe>([{ $sample: { size: 1 } }]);
   }
 
+  async findAllByType(type: string): Promise<Recipe[]> {
+    return await this.recipeModel.find({ type }).populate('owner').exec();
+  }
+
   async create(recipeInput: RecipeInput, owner: User): Promise<Recipe> {
     const createdRecipe = new this.recipeModel(recipeInput);
     createdRecipe.owner = owner;

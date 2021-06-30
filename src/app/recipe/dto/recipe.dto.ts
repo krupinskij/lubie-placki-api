@@ -12,6 +12,8 @@ export class Recipe {
   readonly name: string;
   @Field()
   readonly description: string;
+  @Field()
+  readonly type: string;
   @Field(() => [Ingredient])
   readonly ingredients: Ingredient[];
   @Field(() => [Direction])

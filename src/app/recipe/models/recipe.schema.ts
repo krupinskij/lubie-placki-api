@@ -6,6 +6,7 @@ import { IngredientSchema } from './ingredient.schema';
 export const RecipeSchema = new mongoose.Schema({
   name: String,
   description: String,
+  type: String,
   ingredients: [IngredientSchema],
   directions: [DirectionSchema],
   hints: [HintSchema],
