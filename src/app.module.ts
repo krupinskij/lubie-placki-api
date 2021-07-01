@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { RecipeModule } from './app/recipe/recipe.module';
 import { AuthModule } from './app/auth/auth.module';
+import { PhotoModule } from './app/photo/photo.module';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import config from './config';
@@ -10,6 +11,7 @@ import config from './config';
   imports: [
     RecipeModule,
     AuthModule,
+    PhotoModule,
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       debug: process.env.NODE_ENV !== 'production',

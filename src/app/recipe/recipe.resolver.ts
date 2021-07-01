@@ -9,6 +9,7 @@ import { User } from '../user/user.interface';
 import { UserService } from '../user/user.service';
 import { FavouriteInterceptor } from './interceptors/favourite.interceptor';
 import { OptAuthGuard } from '../auth/strategies/opt-auth.guard';
+import { GraphQLUpload, FileUpload } from 'graphql-upload';
 
 @Resolver()
 export class RecipeResolver {
@@ -72,5 +73,11 @@ export class RecipeResolver {
   async removeFromFavourite(@Args('id') recipeId: string, @CurrentUser() user: User) {
     const currentUser = await this.userService.findById(user._id);
     return await this.recipeService.removeFromFavourite(recipeId, currentUser);
+  }
+
+  @Mutation(() => Recipe)
+  async uploadPhoto(@Args({name: 'file', type: () => GraphQLUpload}) file: FileUpload) {
+    console.log(file);
+    return null;
   }
 }
