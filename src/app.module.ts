@@ -26,7 +26,9 @@ import config from './config';
       },
       fieldResolverEnhancers: ['guards', 'interceptors']
     }),
-    MongooseModule.forRoot(config.DATABASE_URI),
+    MongooseModule.forRoot(config.DATABASE_URI, {
+      useUnifiedTopology: true
+    }),
   ],
   providers: [],
 })

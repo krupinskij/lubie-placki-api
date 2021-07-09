@@ -1,6 +1,6 @@
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
-import { PhotoService } from './photo.service';
+import { PhotoService } from './services/photo.service';
 
 @Resolver()
 export class PhotoResolver {
@@ -10,7 +10,7 @@ export class PhotoResolver {
 
   @Mutation(() => Boolean)
   async uploadPhoto(@Args({name: 'file', type: () => GraphQLUpload}) file: FileUpload) {
-    console.log(file);
+    await this.photoService.save(file);
     return true;
   }
 }

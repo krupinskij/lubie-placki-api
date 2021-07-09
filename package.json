@@ -35,7 +35,9 @@
     "graphql": "^15.4.0",
     "graphql-tools": "^7.0.2",
     "jsonwebtoken": "^8.5.1",
+    "mongo-gridfs": "^1.1.0",
     "mongoose": "^5.11.13",
+    "multer-gridfs-storage": "^5.0.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
@@ -49,6 +51,8 @@
     "@nestjs/testing": "^7.5.1",
     "@types/express": "^4.17.8",
     "@types/jest": "^26.0.15",
+    "@types/mongodb": "^3.6.19",
+    "@types/multer": "^1.4.7",
     "@types/node": "^14.14.6",
     "@types/passport-jwt": "^3.0.3",
     "@types/passport-local": "^1.0.33",
@@ -66,6 +70,10 @@
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.0.5"
+  },
+  "resolutions": {
+    "**/**/fs-capacitor":"^6.2.0",
+    "**/graphql-upload": "^11.0.0"
   },
   "jest": {
     "moduleFileExtensions": [

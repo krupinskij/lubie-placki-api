@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { UserModule } from '../user/user.module';
-import { PhotoSchema } from './models/photo.schema';
+import { MulterModule } from '@nestjs/platform-express';
 import { PhotoResolver } from './photo.resolver';
-import { PhotoService } from './photo.service';
+import { GridFsService } from './services/gridFS.service';
+import { PhotoService } from './services/photo.service';
 
 @Module({
-  imports: [UserModule, MongooseModule.forFeature([{ name: 'Recipe', schema: PhotoSchema }])],
-  providers: [PhotoResolver, PhotoService],
+  imports: [
+    MulterModule.registerAsync({
+        useClass: GridFsService,
+    }),
+  ],
+  providers: [GridFsService, PhotoResolver, PhotoService],
 })
 export class PhotoModule {}
