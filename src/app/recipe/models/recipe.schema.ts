@@ -18,5 +18,6 @@ export const RecipeSchema = new mongoose.Schema({
   fans: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  }]
+  }],
+  photo: String
 });

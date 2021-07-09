@@ -10,6 +10,7 @@ import { UserService } from '../user/user.service';
 import { FavouriteInterceptor } from './interceptors/favourite.interceptor';
 import { OptAuthGuard } from '../auth/strategies/opt-auth.guard';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
+import { PhotoInput } from './inputs/photo.input';
 
 @Resolver()
 export class RecipeResolver {
@@ -76,8 +77,8 @@ export class RecipeResolver {
   }
 
   @Mutation(() => Recipe)
-  async uploadPhoto(@Args({name: 'file', type: () => GraphQLUpload}) file: FileUpload) {
-    console.log(file);
-    return null;
+  @UseGuards(GqlAuthGuard)
+  async addPhotoToRecipe(@Args('input') { recipeId, photoId }: PhotoInput) {
+    return await this.recipeService.addPhotoToRecipe(recipeId, photoId);
   }
 }
