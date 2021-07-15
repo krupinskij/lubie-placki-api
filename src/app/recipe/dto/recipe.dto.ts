@@ -12,6 +12,8 @@ export class Recipe {
   readonly name: string;
   @Field()
   readonly description: string;
+  @Field()
+  readonly type: string;
   @Field(() => [Ingredient])
   readonly ingredients: Ingredient[];
   @Field(() => [Direction])
@@ -22,4 +24,8 @@ export class Recipe {
   readonly owner: User;
   @Field()
   readonly createdAt: number;
+  @Field()
+  readonly isFavourite: boolean;
+  @Field({nullable: true})
+  readonly photo: string;
 }
