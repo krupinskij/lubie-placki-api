@@ -26,4 +26,6 @@ export class Recipe {
   readonly createdAt: number;
   @Field()
   readonly isFavourite: boolean;
+  @Field({nullable: true})
+  readonly photo: string;
 }

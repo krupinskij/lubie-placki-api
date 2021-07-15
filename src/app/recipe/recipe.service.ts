@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Recipe } from './recipe.interface';
 import { RecipeInput } from './inputs/recipe.input';
 import { User } from '../user/user.interface';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class RecipeService {
@@ -49,6 +49,12 @@ export class RecipeService {
   async removeFromFavourite(recipeId: string, user: User): Promise<Recipe> {
     const recipe = await this.recipeModel.findOne({ _id: recipeId }).populate('owner');
     recipe.fans = recipe.fans.filter(fan => fan.id === user.id);
+    return await recipe.save();
+  }
+
+  async addPhotoToRecipe(recipeId: string, photoId: string): Promise<Recipe> {
+    const recipe = await this.recipeModel.findOne({ _id: recipeId }).populate('owner');
+    recipe.photo = photoId;
     return await recipe.save();
   }
 }

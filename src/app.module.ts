@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { RecipeModule } from './app/recipe/recipe.module';
 import { AuthModule } from './app/auth/auth.module';
+import { PhotoModule } from './app/photo/photo.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { FileModule } from './app/file/file.module';
 
 import config from './config';
 
@@ -10,6 +12,7 @@ import config from './config';
   imports: [
     RecipeModule,
     AuthModule,
+    PhotoModule,
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       debug: process.env.NODE_ENV !== 'production',
@@ -24,7 +27,10 @@ import config from './config';
       },
       fieldResolverEnhancers: ['guards', 'interceptors']
     }),
-    MongooseModule.forRoot(config.DATABASE_URI),
+    MongooseModule.forRoot(config.DATABASE_URI, {
+      useUnifiedTopology: true
+    }),
+    FileModule
   ],
   providers: [],
 })

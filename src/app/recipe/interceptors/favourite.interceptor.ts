@@ -2,15 +2,16 @@ import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nes
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Recipe } from '../recipe.interface';
 
-export interface Response<T> {
-  data: T;
+export interface Response {
+  data: Recipe | Recipe[];
 }
 
 @Injectable()
-export class FavouriteInterceptor<T> implements NestInterceptor<T, Response<T>> {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<Response<T>> {
-    return next.handle().pipe(map(data => {
+export class FavouriteInterceptor implements NestInterceptor<Recipe | Recipe[], Recipe | Recipe[]> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<Recipe | Recipe[]> {
+    return next.handle().pipe(map((data: Recipe | Recipe[]) => {
       const ctx = GqlExecutionContext.create(context);
       const currentUser = ctx.getContext().req.user;
 
