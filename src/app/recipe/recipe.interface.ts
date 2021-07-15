@@ -14,4 +14,5 @@ export interface Recipe extends Document {
   owner: User;
   fans: User[];
   photo: string;
+  isFavourite: boolean;
 }

@@ -4,6 +4,7 @@ import { RecipeModule } from './app/recipe/recipe.module';
 import { AuthModule } from './app/auth/auth.module';
 import { PhotoModule } from './app/photo/photo.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { FileModule } from './app/file/file.module';
 
 import config from './config';
 
@@ -29,6 +30,7 @@ import config from './config';
     MongooseModule.forRoot(config.DATABASE_URI, {
       useUnifiedTopology: true
     }),
+    FileModule
   ],
   providers: [],
 })
