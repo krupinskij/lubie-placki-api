@@ -5,6 +5,8 @@ import { Recipe } from './recipe.interface';
 import { RecipeInput } from './inputs/recipe.input';
 import { User } from '../user/user.interface';
 import * as dayjs from 'dayjs';
+import { PaginationInput } from '../shared/input/pagination.input';
+import { RecipePaginated } from '../shared/pagination';
 
 @Injectable()
 export class RecipeService {
@@ -12,12 +14,18 @@ export class RecipeService {
     @InjectModel('Recipe') private readonly recipeModel: Model<Recipe>
   ) {}
 
-  async findOne(_id: string): Promise<Recipe> {
-    return this.recipeModel.findOne({ _id }).populate('owner');
+  async findOne(_id: string): Promise<any> {
+    const data = this.recipeModel.findOne({ _id }).populate('owner');
+    const pages = await this.recipeModel.countDocuments();
+
+    return { data, pages };
   }
 
-  async findAll(): Promise<Recipe[]> {
-    return await this.recipeModel.find().populate('owner').exec();
+  async findAll({ page, limit }: PaginationInput): Promise<RecipePaginated> {
+    const data = await this.recipeModel.find().skip(Math.ceil(limit * (page - 1))).limit(limit).populate('owner').exec();
+    const count = await this.recipeModel.countDocuments();
+
+    return new RecipePaginated(data, count, limit);
   }
 
   async findAllFavourite(user: User): Promise<Recipe[]> {

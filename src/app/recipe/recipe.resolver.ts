@@ -2,7 +2,7 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { RecipeService } from './recipe.service';
 import { Recipe } from './dto/recipe.dto';
 import { RecipeInput } from './inputs/recipe.input';
-import { UseGuards, UseInterceptors } from '@nestjs/common';
+import { Param, UseGuards, UseInterceptors } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/strategies/gql-auth.guard';
 import { CurrentUser } from '../auth/strategies/current-user';
 import { User } from '../user/user.interface';
@@ -11,6 +11,10 @@ import { FavouriteInterceptor } from './interceptors/favourite.interceptor';
 import { OptAuthGuard } from '../auth/strategies/opt-auth.guard';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import { PhotoInput } from './inputs/photo.input';
+import { PaginationPipe } from '../shared/pipes/pagination.pipe';
+import { PaginationOptions } from '../shared/pagination-options';
+import { PaginationInput } from '../shared/input/pagination.input';
+import { RecipePaginated } from '../shared/pagination';
 
 @Resolver()
 export class RecipeResolver {
@@ -19,18 +23,18 @@ export class RecipeResolver {
     private readonly userService: UserService
   ) {}
     
-  @Query(() => Recipe)
-  @UseGuards(OptAuthGuard)
-  @UseInterceptors(FavouriteInterceptor)
-  async recipe(@Args('id') id: string) {
-    return await this.recipeService.findOne(id);
-  }
+  // @Query(() => RecipePagination)
+  // @UseGuards(OptAuthGuard)
+  // // @UseInterceptors(FavouriteInterceptor)
+  // async recipe(@Args('id') id: string) {
+  //   return await this.recipeService.findOne(id);
+  // }
   
-  @Query(() => [Recipe])
+  @Query(() => RecipePaginated)
   @UseGuards(OptAuthGuard)
-  @UseInterceptors(FavouriteInterceptor)
-  async recipes() {
-    return await this.recipeService.findAll();
+  // @UseInterceptors(FavouriteInterceptor)
+  async recipes(@Args('pageInput') options: PaginationInput) {
+    return await this.recipeService.findAll(options);
   }
 
   @Query(() => [Recipe])
