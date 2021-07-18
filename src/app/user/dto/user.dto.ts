@@ -9,4 +9,8 @@ export class User {
   @Field({ nullable: true })
   username?: string
   password?: string
+  @Field({ nullable: true })
+  bio?: string
+  @Field({ nullable: true })
+  avatar?: string
 }
