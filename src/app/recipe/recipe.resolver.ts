@@ -9,12 +9,10 @@ import { User } from '../user/user.interface';
 import { UserService } from '../user/user.service';
 import { FavouriteInterceptor } from './interceptors/favourite.interceptor';
 import { OptAuthGuard } from '../auth/strategies/opt-auth.guard';
-import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import { PhotoInput } from './inputs/photo.input';
-import { PaginationPipe } from '../shared/pipes/pagination.pipe';
-import { PaginationOptions } from '../shared/pagination-options';
 import { PaginationInput } from '../shared/input/pagination.input';
 import { RecipePaginated } from '../shared/pagination';
+import { FavouritesInterceptor } from './interceptors/favourites.interceptor';
 
 @Resolver()
 export class RecipeResolver {
@@ -23,16 +21,16 @@ export class RecipeResolver {
     private readonly userService: UserService
   ) {}
     
-  // @Query(() => RecipePagination)
-  // @UseGuards(OptAuthGuard)
-  // // @UseInterceptors(FavouriteInterceptor)
-  // async recipe(@Args('id') id: string) {
-  //   return await this.recipeService.findOne(id);
-  // }
+  @Query(() => Recipe)
+  @UseGuards(OptAuthGuard)
+  @UseInterceptors(FavouriteInterceptor)
+  async recipe(@Args('id') id: string) {
+    return await this.recipeService.findOne(id);
+  }
   
   @Query(() => RecipePaginated)
   @UseGuards(OptAuthGuard)
-  // @UseInterceptors(FavouriteInterceptor)
+  @UseInterceptors(FavouritesInterceptor)
   async recipes(@Args('pageInput') options: PaginationInput) {
     return await this.recipeService.findAll(options);
   }
@@ -44,19 +42,19 @@ export class RecipeResolver {
     return await this.recipeService.findRandom();
   }
 
-  @Query(() => [Recipe])
+  @Query(() => RecipePaginated)
   @UseGuards(OptAuthGuard)
-  @UseInterceptors(FavouriteInterceptor)
-  async typeRecipes(@Args('type') type: string) {
-    return await this.recipeService.findAllByType(type);
+  @UseInterceptors(FavouritesInterceptor)
+  async typeRecipes(@Args('type') type: string, @Args('pageInput') options: PaginationInput) {
+    return await this.recipeService.findAllByType(type, options);
   }
 
-  @Query(() => [Recipe])
+  @Query(() => RecipePaginated)
   @UseGuards(GqlAuthGuard)
-  @UseInterceptors(FavouriteInterceptor)
-  async favouriteRecipes(@CurrentUser() user: User) {
+  @UseInterceptors(FavouritesInterceptor)
+  async favouriteRecipes(@CurrentUser() user: User, @Args('pageInput') options: PaginationInput) {
     const currentUser = await this.userService.findById(user._id);
-    return await this.recipeService.findAllFavourite(currentUser);
+    return await this.recipeService.findAllFavourite(currentUser, options);
   }
 
   @Mutation(() => Recipe)

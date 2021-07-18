@@ -14,11 +14,8 @@ export class RecipeService {
     @InjectModel('Recipe') private readonly recipeModel: Model<Recipe>
   ) {}
 
-  async findOne(_id: string): Promise<any> {
-    const data = this.recipeModel.findOne({ _id }).populate('owner');
-    const pages = await this.recipeModel.countDocuments();
-
-    return { data, pages };
+  async findOne(_id: string): Promise<Recipe> {
+    return await this.recipeModel.findOne({ _id }).populate('owner');
   }
 
   async findAll({ page, limit }: PaginationInput): Promise<RecipePaginated> {
@@ -28,16 +25,26 @@ export class RecipeService {
     return new RecipePaginated(data, count, limit);
   }
 
-  async findAllFavourite(user: User): Promise<Recipe[]> {
-    return await this.recipeModel.find({ fans: { $in: [user]}}).populate('owner').exec();
+  async findAllFavourite(user: User, { page, limit }: PaginationInput): Promise<RecipePaginated> {
+    const query = this.recipeModel.find({ fans: { $in: [user]}});
+
+    const data = await query.skip(Math.ceil(limit * (page - 1))).limit(limit).populate('owner').exec();
+    const count = await query.countDocuments();
+
+    return new RecipePaginated(data, count, limit);
   }
 
   async findRandom(): Promise<Recipe[]> {
     return await this.recipeModel.aggregate<Recipe>([{ $sample: { size: 1 } }]);
   }
 
-  async findAllByType(type: string): Promise<Recipe[]> {
-    return await this.recipeModel.find({ type }).populate('owner').exec();
+  async findAllByType(type: string, { page, limit }: PaginationInput): Promise<RecipePaginated> {
+    const query = this.recipeModel.find({ type });
+
+    const data = await query.skip(Math.ceil(limit * (page - 1))).limit(limit).populate('owner').exec();
+    const count = await query.countDocuments();
+
+    return new RecipePaginated(data, count, limit);
   }
 
   async create(recipeInput: RecipeInput, owner: User): Promise<Recipe> {
