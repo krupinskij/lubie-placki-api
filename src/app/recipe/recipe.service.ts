@@ -46,6 +46,15 @@ export class RecipeService {
 
     return new RecipePaginated(data, count, limit);
   }
+  
+  async findAllByOwner(owner: User, { page, limit }: PaginationInput): Promise<RecipePaginated> {
+    const query = this.recipeModel.find({ owner });
+
+    const data = await query.skip(Math.ceil(limit * (page - 1))).limit(limit).populate('owner').exec();
+    const count = await query.countDocuments();
+
+    return new RecipePaginated(data, count, limit);
+  }
 
   async create(recipeInput: RecipeInput, owner: User): Promise<Recipe> {
     const createdRecipe = new this.recipeModel(recipeInput);
