@@ -7,7 +7,7 @@ export class Comment {
   _id: string;
   @Field()
   readonly text: string;
-  @Field()
+  @Field(() => User)
   readonly owner: User;
   @Field()
   readonly createdAt: number;

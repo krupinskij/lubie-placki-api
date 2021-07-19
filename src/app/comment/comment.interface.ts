@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { Recipe } from '../recipe/recipe.interface';
 import { User } from '../user/user.interface';
 
 export interface Comment extends Document {
@@ -6,4 +7,5 @@ export interface Comment extends Document {
   text: string;
   createdAt: number;
   owner: User;
+  recipe: Recipe
 }
