@@ -57,6 +57,14 @@ export class RecipeResolver {
     return await this.recipeService.findAllFavourite(currentUser, options);
   }
 
+  @Query(() => RecipePaginated)
+  @UseGuards(OptAuthGuard)
+  @UseInterceptors(FavouritesInterceptor)
+  async userRecipes(@Args('owner') owner: string, @Args('pageInput') options: PaginationInput) {
+    const user = await this.userService.findById(owner);
+    return await this.recipeService.findAllByOwner(user, options);
+  }
+
   @Mutation(() => Recipe)
   @UseGuards(GqlAuthGuard)
   async createRecipe(@Args('input') input: RecipeInput, @CurrentUser() user: User) {
