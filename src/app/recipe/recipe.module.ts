@@ -8,5 +8,6 @@ import { UserModule } from '../user/user.module';
 @Module({
   imports: [UserModule, MongooseModule.forFeature([{ name: 'Recipe', schema: RecipeSchema }])],
   providers: [RecipeResolver, RecipeService],
+  exports: [RecipeService]
 })
 export class RecipeModule {}
