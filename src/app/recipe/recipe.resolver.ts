@@ -35,9 +35,10 @@ export class RecipeResolver {
     return await this.recipeService.findAll(options);
   }
 
-  @Query(() => [Recipe])
+  @Query(() => String)
   async randomRecipe() {
-    return await this.recipeService.findRandom();
+    const recipes = await this.recipeService.findRandom();
+    return recipes[0]._id
   }
 
   @Query(() => RecipePaginated)
