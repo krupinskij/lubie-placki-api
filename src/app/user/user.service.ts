@@ -17,6 +17,10 @@ export class UserService {
         return await this.userModel.findOne({ _id });
     }
 
+    async findByRefreshToken(refreshToken: string): Promise<User> {
+        return await this.userModel.findOne({ refreshToken });
+    }
+
     async createUser(newUserInput: NewUserInput): Promise<User> {
         return await this.userModel.create({
             ...newUserInput,
