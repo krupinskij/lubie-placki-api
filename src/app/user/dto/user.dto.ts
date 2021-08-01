@@ -8,7 +8,6 @@ export class User {
   email?: string
   @Field({ nullable: true })
   username?: string
-  password?: string
   @Field({ nullable: true })
   bio?: string
   @Field({ nullable: true })

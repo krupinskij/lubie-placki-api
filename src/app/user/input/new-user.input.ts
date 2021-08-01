@@ -10,4 +10,10 @@ export class NewUserInput {
 
   @Field()
   password: string
+
+  @Field()
+  refreshToken: string
+
+  @Field()
+  refreshTokenExpiration: number;
 }

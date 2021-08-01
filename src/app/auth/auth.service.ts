@@ -6,6 +6,7 @@ import { AuthLoginInput } from './inputs/auth-login.input';
 import { AuthRegisterInput } from './inputs/auth-register.input';
 import { UserToken } from './dto/user-token.dto';
 import { User } from '../user/user.interface';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class AuthService {
@@ -18,13 +19,24 @@ export class AuthService {
         return bcrypt.compare(loginPass, userPass);
     }
 
-    signToken(user: User): UserToken {
+    async validateRefreshToken(
+        refreshToken: string, 
+        userRefreshToken: string, 
+        userRefreshTokenExpirationDate: number
+    ): Promise<boolean> {
+        return (
+            dayjs.unix(userRefreshTokenExpirationDate).isBefore(new Date()) &&
+            refreshToken === userRefreshToken
+        );
+    }
+
+    signToken(user: User, refreshToken = ''): UserToken {
         const payload = {
             username: user.username,
             _id: user._id
         }
 
-        return { user, token: this.jwtService.sign(payload) };
+        return { user, token: this.jwtService.sign(payload), refreshToken };
     }
 
     async login(input: AuthLoginInput): Promise<UserToken> {
@@ -37,7 +49,15 @@ export class AuthService {
             throw new UnauthorizedException(`Invalid password`);
         }
 
-        return this.signToken(user);
+        const salt = await bcrypt.genSalt(10);
+        const refreshToken = await bcrypt.hash(new Date().toDateString(), salt);
+        const refreshTokenExpiration = dayjs().add(7, 'day').unix();
+
+        user.refreshToken = refreshToken;
+        user.refreshTokenExpiration = refreshTokenExpiration;
+        await user.save();
+
+        return this.signToken(user, refreshToken);
     }
 
     async register(input: AuthRegisterInput): Promise<UserToken> {
@@ -50,11 +70,26 @@ export class AuthService {
         const salt = await bcrypt.genSalt(10);
         const password = await bcrypt.hash(input.password, salt);
 
+        const refreshToken = await bcrypt.hash(new Date().toDateString(), salt);
+        const refreshTokenExpiration = dayjs().add(7, 'day').unix();
+
         const user = await this.userService.createUser({
             ...input,
             password,
+            refreshToken,
+            refreshTokenExpiration
         });
         
+        return this.signToken(user, refreshToken);
+    }
+
+    async getNewToken(refreshToken: string): Promise<UserToken> {
+        const user = await this.userService.findByRefreshToken(refreshToken); 
+
+        if(!this.validateRefreshToken(refreshToken, user.refreshToken, user.refreshTokenExpiration)) {
+            throw new UnauthorizedException(`Invalid refresh token`);
+        }
+
         return this.signToken(user);
     }
 }

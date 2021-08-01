@@ -7,5 +7,8 @@ export class UserToken {
   token: string
 
   @Field()
+  refreshToken: string
+
+  @Field()
   user: User
 }
